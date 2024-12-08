@@ -1,0 +1,27 @@
+name: Dependabot
+
+on:
+  schedule:
+    # Every weekday at 1pm UTC
+    - cron: '0 13 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/setup-node@master
+        with:
+          node-version: latest
+
+      - uses: actions/checkout@master
+      - run: npx npm-check-updates
+      - run: pnpm
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@main
